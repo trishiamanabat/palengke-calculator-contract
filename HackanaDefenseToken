@@ -1,0 +1,24 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+// 1. Import the industry-standard ERC20 contract
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+/**
+ * @title HackanaDefenseToken
+ * @dev Neri's official currency to rebuild San Juan City.
+ * It inherits all the security of OpenZeppelin's ERC20.
+ */
+contract HackanaDefenseToken is ERC20 {
+    
+    /**
+     * @dev The constructor sets the name and symbol.
+     * We also mint the initial supply to the person who deploys it.
+     */
+    constructor() ERC20("DefenseToken", "DEF") {
+        // 2. Mint 1,000 tokens. 
+        // We multiply by 10^decimals (usually 18) because ERC20 tokens 
+        // don't use decimals; they use tiny whole units (like Wei).
+        _mint(msg.sender, 1000 * 10 ** decimals());
+    }
+}
