@@ -1,0 +1,25 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+
+/**
+ * @title UserRegistryV1
+ * @dev The first line of defense. Users can register their names.
+ */
+contract UserRegistryV1 is Initializable {
+    mapping(address => string) public userNames;
+
+    // Upgradeable contracts use initialize instead of a constructor
+    function initialize() public initializer {
+        // Initial setup logic goes here
+    }
+
+    function registerUser(string memory name) public {
+        userNames[msg.sender] = name;
+    }
+
+    function getUser(address user) public view returns (string memory) {
+        return userNames[user];
+    }
+}
