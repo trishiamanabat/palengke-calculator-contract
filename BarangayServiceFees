@@ -1,0 +1,32 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+/**
+ * @title BarangayServiceFees
+ * @dev Demonstrates the difference between reading state (view) and simple math (pure).
+ */
+contract BarangayServiceFees {
+    // State Variable: This costs "Gas" to change, but is free to read.
+    uint256 public certificationFee = 100;
+
+    /**
+     * @notice VIEW: This function reads from the blockchain (the state variable above).
+     * It doesn't change anything, so it costs NO gas when called from outside.
+     */
+    function getCertificationFee() public view returns (uint256) {
+        return certificationFee;
+    }
+
+    /**
+     * @notice PURE: This function does NOT read from or write to the blockchain.
+     * It only cares about the numbers you give it (numberOfCertifications).
+     * It's like a standalone calculator.
+     */
+    function calculateTotalCost(
+        uint256 numberOfCertifications
+    ) public pure returns (uint256) {
+        // We use the hardcoded value 100 here. 
+        // If we tried to use 'certificationFee', it would have to be a 'view' function!
+        return numberOfCertifications * 100;
+    }
+}
