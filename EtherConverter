@@ -1,0 +1,29 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+/**
+ * @title EtherConverter
+ * @dev Neri's tool to eliminate decimal errors and block Hackana's siphoning tricks.
+ */
+contract EtherConverter {
+
+    /**
+     * @notice Converts Ether (whole units) into Wei.
+     * @param _etherAmount The amount of Ether to convert.
+     * @return The equivalent value in Wei.
+     */
+    function etherToWei(uint256 _etherAmount) public pure returns (uint256) {
+        // Solidity understands the keyword 'ether' as 10^18
+        return _etherAmount * 1 ether;
+    }
+
+    /**
+     * @notice Converts Wei back into Ether.
+     * @param _weiAmount The amount of Wei to convert.
+     * @return The equivalent value in Ether.
+     */
+    function weiToEther(uint256 _weiAmount) public pure returns (uint256) {
+        // Division by 1 ether helps us see the "whole" Ether value again
+        return _weiAmount / 1 ether;
+    }
+}
