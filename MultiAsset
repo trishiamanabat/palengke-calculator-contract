@@ -1,0 +1,47 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+// 1. Import the Multi-Token and Access Control blueprints
+import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+/**
+ * @title MultiAsset
+ * @dev Neri's all-in-one inventory system for San Juan City's digital economy.
+ */
+contract MultiAsset is ERC1155, Ownable {
+    // We define constants to keep our IDs easy to remember
+    uint256 public constant GOLD = 1;     // Fungible (1,000 units)
+    uint256 public constant ARTIFACT = 2; // Non-Fungible (1 unit)
+
+    /**
+     * @dev Initialize the contract with a Metadata URI and mint initial assets.
+     * Ownable(msg.sender) makes Neri the manager.
+     */
+    constructor() 
+        ERC1155("https://api.bitskwela.com/metadata/{id}.json") 
+        Ownable(msg.sender) 
+    {
+        // 2. Mint 1,000 units of GOLD (ID: 1) to Neri
+        _mint(msg.sender, GOLD, 1000, "");
+
+        // 3. Mint 1 unit of the ARTIFACT (ID: 2) to Neri
+        _mint(msg.sender, ARTIFACT, 1, "");
+    }
+
+    /**
+     * @notice Allows the Barangay Admin (Owner) to create more assets as needed.
+     * @param to The recipient of the new tokens.
+     * @param id The ID of the token type (1 for Gold, 2 for Artifact).
+     * @param amount How many to create.
+     * @param data Optional extra information.
+     */
+    function mint(
+        address to, 
+        uint256 id, 
+        uint256 amount, 
+        bytes memory data
+    ) public onlyOwner {
+        _mint(to, id, amount, data);
+    }
+} 
