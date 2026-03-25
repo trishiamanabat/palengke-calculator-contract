@@ -1,0 +1,24 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+// 1. Importing the 'Blueprint' for a standard token
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+/**
+ * @title SanJuanCityToken
+ * @dev The official community currency for San Juan City, 
+ * built on the most trusted security framework in the world.
+ */
+contract SanJuanCityToken is ERC20 {
+    
+    /**
+     * @dev The constructor runs once at deployment.
+     * It sets the Name: "SanJuanToken" and the Symbol: "SJC".
+     */
+    constructor() ERC20("SanJuanToken", "SJC") {
+        // 2. We mint the initial supply to the person who deployed the contract (Neri).
+        // 1000 * 10^18 ensures we have 1,000 whole tokens, 
+        // each divisible into 18 decimal places.
+        _mint(msg.sender, 1000 * 10 ** decimals());
+    }
+}
