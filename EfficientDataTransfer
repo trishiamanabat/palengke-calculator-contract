@@ -1,0 +1,31 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+/**
+ * @title EfficientDataTransfer
+ * @dev Neri's ultimate defense against "Memory Bloat" attacks by Hackana.
+ */
+contract EfficientDataTransfer {
+
+    /**
+     * @notice CALLDATA: The most efficient way to handle external inputs.
+     * It is non-modifiable and stays in the original transaction data.
+     * @param data The input string directly from the caller.
+     */
+    function echoData(string calldata data) external pure returns (string memory) {
+        // We simply point to the data where it already exists. 
+        // No extra copying is needed!
+        return data;
+    }
+
+    /**
+     * @notice MEMORY: A slightly more expensive way to handle inputs.
+     * Use this if you need to CHANGE the data inside the function.
+     * @param data The input string copied into temporary memory.
+     */
+    function memoryData(string memory data) public pure returns (string memory) {
+        // This creates a BRAND NEW COPY of the string in memory.
+        // Copying takes extra gas!
+        return data;
+    }
+}
