@@ -1,0 +1,36 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+/**
+ * @title DataOptimization
+ * @dev Neri's strategy to save gas and defend against system bloat.
+ */
+contract DataOptimization {
+    // 1. STORAGE: This lives in the "National Archives" (Blockchain)
+    // It is expensive to change but stays there forever.
+    string public storedMessage = "Stored permanently";
+
+    /**
+     * @notice Updates the permanent message using a temporary input.
+     * @param tempMessage The input is marked 'memory' because it only 
+     * needs to exist while the function is running.
+     */
+    function updateMessage(string memory tempMessage) public {
+        // We move the data from the "Post-it Note" (memory) 
+        // to the "Archives" (storage).
+        storedMessage = tempMessage;
+    }
+
+    /**
+     * @notice Copies data from storage to memory to show how to work with it locally.
+     * @return The message currently held in temporary memory.
+     */
+    function compareStorageAndMemory() public view returns (string memory) {
+        // We pull the data out of the "Archives" and put it on a 
+        // temporary "Post-it Note" (memory).
+        string memory tempMessage = storedMessage;
+        
+        // This 'tempMessage' will vanish the moment the function finishes!
+        return tempMessage;
+    }
+}
