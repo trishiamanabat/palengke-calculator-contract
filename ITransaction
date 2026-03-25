@@ -1,0 +1,56 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+/**
+ * @title ITransaction
+ * @dev The "Rulebook." It tells the world what functions a Marketplace must have,
+ * but it doesn't write the logic itself.
+ */
+interface ITransaction {
+    function deposit(uint256 amount) external payable;
+    function withdraw(uint256 amount) external;
+    function checkBalance() external view returns (uint256);
+}
+
+/**
+ * @title Marketplace
+ * @dev The actual implementation. 'is ITransaction' means this contract 
+ * promises to follow the rules defined above.
+ */
+contract Marketplace is ITransaction {
+    // Private mapping to keep user data secure within this contract
+    mapping(address => uint256) private balances;
+
+    /**
+     * @notice Allows a vendor or customer to put money into their marketplace account.
+     * @param amount Must match the Ether sent (msg.value).
+     */
+    function deposit(uint256 amount) external payable override {
+        // Validation: Ensure the digital number matches the physical Ether sent
+        require(msg.value == amount, "Amount does not match sent Ether");
+
+        balances[msg.sender] += amount;
+    }
+
+    /**
+     * @notice Allows a user to take their earnings out of the marketplace.
+     * @param amount The amount to move to their personal wallet.
+     */
+    function withdraw(uint256 amount) external override {
+        // Safety Check: You can't take out more than you have!
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+
+        // Subtract from the internal ledger FIRST (to prevent re-entrancy attacks)
+        balances[msg.sender] -= amount;
+
+        // Physically transfer the Ether to the caller's wallet
+        payable(msg.sender).transfer(amount);
+    }
+
+    /**
+     * @notice A quick check of the user's current standing in the market.
+     */
+    function checkBalance() external view override returns (uint256) {
+        return balances[msg.sender];
+    }
+}
