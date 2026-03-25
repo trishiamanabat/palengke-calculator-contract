@@ -1,0 +1,40 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+/**
+ * @title PalengkeTransactions
+ * @dev A system for Neri to record a chronological list of all market payments.
+ */
+contract PalengkeTransactions {
+    
+    // 1. Declare a dynamic array to store payment amounts
+    // Unlike a mapping, an array keeps things in the order they were added.
+    uint256[] public payments;
+
+    /**
+     * @notice Adds a new payment amount to the end of the list.
+     * @param _amount The value of the transaction (e.g., 50 for a kilo of rice).
+     */
+    function recordPayment(uint256 _amount) public {
+        // .push() adds the value to the next available spot in the array.
+        payments.push(_amount);
+    }
+
+    /**
+     * @notice Returns how many transactions have been recorded so far.
+     */
+    function getTotalPayments() public view returns (uint256) {
+        // .length tells us the size of the array.
+        return payments.length;
+    }
+
+    /**
+     * @notice Retrieves a specific payment using its position (index).
+     * @param _index The position in the list (starting from 0).
+     */
+    function getPayment(uint256 _index) public view returns (uint256) {
+        // Security check: ensure Neri doesn't look for a payment that doesn't exist.
+        require(_index < payments.length, "Invalid index.");
+        return payments[_index];
+    }
+}
