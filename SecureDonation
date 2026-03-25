@@ -1,0 +1,51 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+// 1. Import the ultimate shields
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+/**
+ * @title SecureDonation
+ * @dev Neri's final masterpiece. A contract that cannot be drained or tricked.
+ */
+contract SecureDonation is Ownable, ReentrancyGuard {
+    uint256 public totalDonations;
+
+    // Track how much each citizen has contributed
+    mapping(address => uint256) public donations;
+
+    // Initialize the contract and set Neri as the Owner
+    constructor() Ownable(msg.sender) {}
+
+    /**
+     * @notice Accepts ETH donations safely.
+     * nonReentrant: This creates a "lock" so Hackana can't call this 
+     * while it's still processing.
+     */
+    function donate() external payable nonReentrant {
+        // Validation: No "empty" donations allowed
+        require(msg.value > 0, "Donation must be greater than zero.");
+        
+        donations[msg.sender] += msg.value;
+        totalDonations += msg.value;
+    }
+
+    /**
+     * @notice Allows only Neri (the owner) to withdraw the city funds.
+     * Uses the most secure transfer method available (.call).
+     */
+    function withdraw() external onlyOwner nonReentrant {
+        uint256 balance = address(this).balance;
+        require(balance > 0, "No funds to withdraw.");
+
+        // 2. The secure way to send Ether
+        // Using .call is better than .transfer because it prevents 
+        // gas-related failures during the transfer.
+        (bool success, ) = owner().call{value: balance}("");
+        require(success, "Withdrawal failed.");
+        
+        // Reset totalDonations after successful withdrawal
+        totalDonations = 0;
+    }
+}
