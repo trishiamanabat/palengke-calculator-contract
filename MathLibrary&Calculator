@@ -1,0 +1,57 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+/**
+ * @title MathLibrary
+ * @dev Professional-grade library for basic arithmetic.
+ */
+library MathLibrary {
+    /**
+     * @dev Adds two numbers and returns the result.
+     */
+    function add(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a + b;
+    }
+
+    /**
+     * @dev Multiplies two numbers and returns the result.
+     */
+    function multiply(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a * b;
+    }
+} 
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+// Step 1: Import the logic from the other file in the same directory
+import "./MathLibrary.sol";
+
+/**
+ * @title Calculator
+ * @dev Uses MathLibrary to perform modular calculations for the Barangay.
+ */
+contract Calculator {
+    
+    /**
+     * @notice Calculates the sum of two numbers using the library.
+     * @param x First number
+     * @param y Second number
+     * @return The sum
+     */
+    function calculateSum(uint256 x, uint256 y) public pure returns (uint256) {
+        // Step 2: Call the library function: LibraryName.functionName()
+        return MathLibrary.add(x, y);
+    }
+
+    /**
+     * @notice Calculates the product of two numbers using the library.
+     * @param x First number
+     * @param y Second number
+     * @return The product
+     */
+    function calculateProduct(uint256 x, uint256 y) public pure returns (uint256) {
+        // Step 3: Call the library function for multiplication
+        return MathLibrary.multiply(x, y);
+    }
+}
