@@ -1,0 +1,29 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+/**
+ * @title BarangayProgram
+ * @dev Allows Neri to initialize community programs with a fixed name and budget.
+ */
+contract BarangayProgram {
+    // State Variables
+    string public programName;
+    uint256 public startingBalance;
+
+    /**
+     * @dev The constructor runs ONLY ONCE when the contract is deployed.
+     * It sets the permanent identity and starting funds of the program.
+     */
+    constructor(string memory _programName, uint256 _startingBalance) {
+        programName = _programName;
+        startingBalance = _startingBalance;
+    }
+
+    /**
+     * @notice Retrieves the program name and its allocated funds.
+     * @return (string, uint256) The name and the balance.
+     */
+    function getProgramDetails() public view returns (string memory, uint256) {
+        return (programName, startingBalance);
+    }
+}
