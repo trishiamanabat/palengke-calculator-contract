@@ -1,0 +1,32 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+/**
+ * @title BarangayWallet
+ * @dev A secure, transparent wallet for San Juan City that handles all incoming funds.
+ */
+contract BarangayWallet {
+    // 1. State Variable: The "Grand Total" of the community vault
+    uint256 public totalReceived;
+
+    // 2. Event: The "Audit Trail" for any transaction that doesn't fit the rules
+    event InvalidCall(address sender, uint256 value, bytes data);
+
+    /**
+     * @notice RECEIVE: The "Donation Slot." 
+     * Triggered when someone sends plain Ether with no extra instructions (data).
+     */
+    receive() external payable {
+        totalReceived += msg.value;
+    }
+
+    /**
+     * @notice FALLBACK: The "Help Desk."
+     * Triggered if someone tries to call a function that doesn't exist 
+     * or sends Ether with confusing data.
+     */
+    fallback() external payable {
+        // We log exactly WHO sent it, HOW MUCH, and WHAT 'wrong' data they sent
+        emit InvalidCall(msg.sender, msg.value, msg.data);
+    }
+}
