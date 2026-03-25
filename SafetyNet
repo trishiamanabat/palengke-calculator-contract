@@ -1,0 +1,28 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract SafetyNet {
+    uint256 public totalStrayFunds;
+    string public lastAction;
+
+    // 1. The Receive Function
+    // This is triggered when someone sends PLAIN Ether (no data).
+    // It's like a donation box with no forms attached.
+    receive() external payable {
+        totalStrayFunds += msg.value;
+        lastAction = "Plain Ether received via receive()";
+    }
+
+    // 2. The Fallback Function
+    // This is triggered when someone tries to call a function that DOES NOT exist,
+    // or sends Ether with data that the contract doesn't recognize.
+    fallback() external payable {
+        totalStrayFunds += msg.value;
+        lastAction = "Unknown call handled by fallback()";
+    }
+
+    // Helper function to check the contract's actual balance
+    function getContractBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
+}
