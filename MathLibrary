@@ -1,0 +1,42 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+/**
+ * @title MathLibrary
+ * @dev A reusable set of tools for the city. 
+ * Libraries cannot store Ether or state variables; they only provide logic.
+ */
+library MathLibrary {
+    /**
+     * @notice Calculates a percentage of a base number.
+     * @dev Marked as 'internal' so the code is compiled into the contract that uses it.
+     */
+    function calculatePercentage(
+        uint256 base,
+        uint256 percent
+    ) internal pure returns (uint256) {
+        // We multiply first, then divide to maintain precision in integer math
+        return (base * percent) / 100;
+    }
+}
+
+/**
+ * @title HackanaDefense
+ * @dev The main contract protecting San Juan City's economy.
+ */
+contract HackanaDefense {
+    string public city = "San Juan City";
+
+    /**
+     * @notice Uses the MathLibrary to find the fee for a transaction.
+     * @param transactionAmount The total amount sent (e.g., 1000).
+     * @param feePercent The tax/fee percentage (e.g., 5 for 5%).
+     */
+    function calculateFee(
+        uint256 transactionAmount,
+        uint256 feePercent
+    ) public pure returns (uint256) {
+        // We call the library directly: LibraryName.functionName()
+        return MathLibrary.calculatePercentage(transactionAmount, feePercent);
+    }
+}
