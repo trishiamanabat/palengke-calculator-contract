@@ -1,0 +1,32 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+/**
+ * @title EtherReceiver
+ * @dev Neri's solution for secure, real-time Ether payments for local vendors.
+ */
+contract EtherReceiver {
+    // 1. Event: The "Digital Receipt"
+    // 'indexed' allows vendors to filter and find their own payments easily.
+    event PaymentReceived(address indexed from, uint256 amount);
+
+    /**
+     * @notice The 'payable' keyword is the "Wallet Slot." 
+     * Without it, the function would reject any Ether sent to it.
+     */
+    function receivePayment() public payable {
+        // Validation: Ensure the payment isn't empty
+        require(msg.value > 0, "Must send some Ether to pay.");
+
+        // 2. Emit the receipt for the vendor's records
+        emit PaymentReceived(msg.sender, msg.value);
+    }
+
+    /**
+     * @notice Returns the total amount of Ether (in Wei) currently held by the contract.
+     */
+    function getBalance() public view returns (uint256) {
+        // 'address(this)' refers to this specific contract's identity
+        return address(this).balance;
+    }
+}
