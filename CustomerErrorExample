@@ -1,0 +1,46 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.4;
+
+/**
+ * @title CustomErrorExample
+ * @dev Neri's gas-optimized contract using modern Solidity error handling.
+ */
+contract CustomErrorExample {
+    // 1. Define Custom Errors at the top. 
+    // These are much cheaper than string-based 'require' messages.
+    error UnauthorizedAccess(address caller);
+    error InsufficientFunds(uint256 requested, uint256 available);
+
+    address public owner;
+    uint256 public totalBalance;
+
+    constructor() {
+        owner = msg.sender;
+        totalBalance = 1000;
+    }
+
+    /**
+     * @notice Allows the owner to withdraw funds.
+     * @param amount The quantity to remove from the balance.
+     */
+    function withdraw(uint256 amount) public {
+        // 2. Check for Authorization
+        if (msg.sender != owner) {
+            // Revert with the specific error and provide the 'caller' data
+            revert UnauthorizedAccess(msg.sender);
+        }
+
+        // 3. Check for Funds
+        if (amount > totalBalance) {
+            // Revert and tell the user exactly how much they are short
+            revert InsufficientFunds(amount, totalBalance);
+        }
+
+        // State update
+        totalBalance -= amount;
+    }
+
+    function checkBalance() public view returns (uint256) {
+        return totalBalance;
+    }
+}
