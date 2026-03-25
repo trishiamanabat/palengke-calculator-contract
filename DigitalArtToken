@@ -1,0 +1,45 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+// 1. Import the NFT "Blueprint" and Security tools
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+/**
+ * @title DigitalArtToken
+ * @dev Neri's platform for San Juan artists to reclaim ownership of their work.
+ */
+contract DigitalArtToken is ERC721URIStorage, Ownable {
+    // Private counter for unique IDs
+    uint256 private _tokenIds;
+
+    /**
+     * @dev Initialize the NFT collection.
+     * Name: DigitalArtToken, Symbol: DAT. 
+     * Ownable(msg.sender) makes Neri the "Admin" of this contract.
+     */
+    constructor() ERC721("DigitalArtToken", "DAT") Ownable(msg.sender) {}
+
+    /**
+     * @notice Mints a unique NFT to an artist or collector.
+     * @param recipient The wallet address receiving the NFT.
+     * @param tokenURI The link to the artwork's metadata (image, name, etc.).
+     * @return The ID of the newly created NFT.
+     */
+    function mintArt(
+        address recipient,
+        string memory tokenURI
+    ) public onlyOwner returns (uint256) {
+        // Increment the ID so every piece of art is unique
+        _tokenIds++;
+        uint256 newItemId = _tokenIds;
+
+        // 2. Mint the token to the recipient
+        _safeMint(recipient, newItemId);
+
+        // 3. Link the token to its specific digital data (image link)
+        _setTokenURI(newItemId, tokenURI);
+
+        return newItemId;
+    }
+}
