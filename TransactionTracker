@@ -1,0 +1,26 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+/**
+ * @title TransactionTracker
+ * @dev Neri's tool to unmask Hackana by logging the 'Who' and the 'When'.
+ */
+contract TransactionTracker {
+    // State Variables: These will hold the evidence on the blockchain
+    address public caller;
+    uint256 public transactionTime;
+
+    /**
+     * @notice Updates the tracker with the identity of the current user 
+     * and the exact time the block was mined.
+     */
+    function updateTransaction() public {
+        // Global Variable: msg.sender 
+        // This is the wallet address of the person clicking the button.
+        caller = msg.sender;
+
+        // Global Variable: block.timestamp 
+        // This is the Unix timestamp (seconds since Jan 1, 1970) of the current block.
+        transactionTime = block.timestamp;
+    }
+}
