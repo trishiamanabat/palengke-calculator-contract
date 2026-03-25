@@ -1,0 +1,29 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+/**
+ * @title BarangayFund
+ * @dev High transparency fund tracker for Neri's local community.
+ */
+contract BarangayFund {
+    uint256 public totalFunds;
+
+    // 1. Declare the Event: Think of this as a digital receipt that lives off-chain
+    // but is permanently linked to the transaction.
+    event FundUpdated(uint256 newAmount, address updatedBy);
+
+    /**
+     * @notice Allows residents or officials to add money to the fund.
+     * @param amount The value being added to the budget.
+     */
+    function depositFunds(uint256 amount) public {
+        // Validation: No empty deposits!
+        require(amount > 0, "Deposit amount must be greater than zero.");
+        
+        // Update the state variable
+        totalFunds += amount;
+
+        // 2. Emit the Event: This "broadcasts" the data to the blockchain logs.
+        emit FundUpdated(totalFunds, msg.sender);
+    }
+}
